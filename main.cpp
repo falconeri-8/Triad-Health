@@ -7,7 +7,7 @@
 
 using namespace std;
 
-string docFile = "doctors.txt";
+string docFile = "docFile.txt";
 string patFile = "patFile.txt";
 
 int Interface(); int doctorsInterface(); int patientsInterface();
@@ -64,6 +64,8 @@ int patientsInterface()
                 cout << "Assign Doctor by Name: ";
                 getline(cin, patient.doctor.name);
 
+                bool found = false;
+
                 for (int i = 0; i < doctors.size(); i++)
                 {
                     if (doctors[i].name == patient.doctor.name)
@@ -71,8 +73,12 @@ int patientsInterface()
                         patient.doctor = doctors[i];
                         patients.push_back(patient);
                         cout << "\nDoctor available\n";
+                        found = true;
                         break;
                     }
+                }
+                if (!found)
+                {
                     cout << "\nDoctor not found\n";
                 }
                 break;
