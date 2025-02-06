@@ -48,15 +48,19 @@ int patientsInterface()
                 cout << "\nEnter Patient Name: ";
                 cin.ignore();
                 getline(cin, patient.name);
+
                 cout << "Enter Patient Age: ";
                 cin.ignore();
                 cin >> patient.age;
+
                 cout << "Enter Patient Email: ";
                 cin.ignore();
                 getline(cin, patient.email);
+
                 cout << "Enter Patient Phone: ";
                 cin.ignore();
                 cin >> patient.phone;
+
                 cout << "Enter Description of illness: ";
                 cin.ignore();
                 getline(cin, patient.message);
@@ -72,7 +76,7 @@ int patientsInterface()
                     {
                         patient.doctor = doctors[i];
                         patients.push_back(patient);
-                        cout << "\nDoctor available\n";
+                        cout << "\nDoctor assigned successfully\n";
                         found = true;
                         break;
                     }
@@ -96,10 +100,78 @@ int patientsInterface()
                         cout << "Patient Age: " << patients[i].age << "\nPatient Email: " << patients[i].email << "\nPatient Phone: " << patients[i].phone
                         << "\nDescription: " << patients[i].message << endl;
                         cout << "\nAssigned Doctor: " << patients[i].doctor.id << "\nName: " << patients[i].doctor.name << "\nDepartment: " << patients[i].doctor.department << endl;
+                        break;
                     }
                 }
                 break;
             }
+    case 3:
+            {
+                string name;
+                cout << "\nEnter Patient Name: ";
+                cin.ignore();
+                getline(cin, name);
+
+                for (int i = 0; i < patients.size(); i++)
+                {
+                    if (patients[i].name == name)
+                    {
+                        cout << "\nUpdated Name: ";
+                        getline(cin, patients[i].name);
+
+                        cout << "Updated Age: ";
+                        cin >> patients[i].age;
+                        cin.ignore();
+
+                        cout << "Updated Email: ";
+                        getline(cin, patients[i].email);
+
+                        cout << "Updated Phone: ";
+                        cin >> patients[i].phone;
+                        cin.ignore();
+
+                        cout << "Updated Description: ";
+                        getline(cin, patients[i].message);
+
+                        cout << "Updated Doctor Name: ";
+                        string docName;
+                        getline(cin, docName);
+
+                        bool doctorFound = false;
+                        for (int j = 0; j < doctors.size(); j++)
+                        {
+                            if (doctors[j].name == docName)
+                            {
+                                patients[i].doctor = doctors[j];
+                                cout << "\nDoctor assigned successfully.\n";
+                                doctorFound = true;
+                                break;
+                            }
+                        }
+
+                        if (!doctorFound)
+                        {
+                            cout << "\nDoctor not found. Keeping the previous doctor assigned.\n";
+                        }
+
+                        break;
+                    }
+                }
+                break;
+            }
+    case 4:
+        cout << "\nEnter Patient Name: ";
+        string name;
+        cin >> name;
+        for (int i = 0; i < patients.size(); i++)
+        {
+            if (patients[i].name == name)
+            {
+                patients.erase(patients.begin() + i);
+                break;
+            }
+        }
+        break;
     case 5:
             {
                 Interface();
@@ -144,6 +216,7 @@ int doctorsInterface()
                 if (doctors[i].id == id)
                 {
                     cout << "\nDoctor Name: " << doctors[i].name << "\nDoctor Department: " << doctors[i].department << "\n";
+                    break;
                 }
             }
             break;
@@ -162,6 +235,7 @@ int doctorsInterface()
                     getline(cin, doctors[i].name);
                     cout << "Enter new department: ";
                     getline(cin, doctors[i].department);
+                    break;
                 }
             }
             break;
@@ -176,6 +250,7 @@ int doctorsInterface()
                 if (doctors[i].id == id)
                 {
                     doctors.erase(doctors.begin() + i);
+                    break;
                 }
             }
             break;
