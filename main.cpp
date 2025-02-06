@@ -10,292 +10,267 @@ using namespace std;
 string docFile = "docFile.txt";
 string patFile = "patFile.txt";
 
-int Interface(); int doctorsInterface(); int patientsInterface();
+int Interface();
+int doctorsInterface();
+int patientsInterface();
 
-struct Doctor
-{
+struct Doctor {
     int id;
     string name;
     string department;
 };
 
-struct Patient
-{
+struct Patient {
     string name;
     string email;
     string message;
-
     int phone;
     int age;
-
     Doctor doctor;
 };
 
-vector<Doctor> doctors; vector<Patient> patients;
+vector<Doctor> doctors;
+vector<Patient> patients;
 
-int patientsInterface()
-{
+int patientsInterface() {
     int choice;
-    cout << "\n[1] Register Patient\n[2] Search Patient\n[3] Update Patient Record\n[4] Remove Patient\n[5] Exit\n";
-    cout << "\nEnter [Key]: ";
+    cout << "\nPatient Management\n";
+    cout << "[1] Register Patient\n[2] Search Patient\n[3] Update Patient Record\n[4] Remove Patient\n[5] Exit\n";
+    cout << "Enter choice: ";
     cin >> choice;
+    cin.ignore();
 
-    switch (choice)
-    {
-        case 1:
-            {
-                Patient patient;
-                cout << "\nEnter Patient Name: ";
-                cin.ignore();
-                getline(cin, patient.name);
+    switch (choice) {
+        case 1: {
+            Patient patient;
+            cout << "\n[Register New Patient]\n";
+            cout << "\nEnter Patient Name: ";
+            getline(cin, patient.name);
+            cout << "Enter Age: ";
+            cin >> patient.age;
+            cin.ignore();
+            cout << "Enter Email: ";
+            getline(cin, patient.email);
+            cout << "Enter Phone: ";
+            cin >> patient.phone;
+            cin.ignore();
+            cout << "Enter Description of Illness: ";
+            getline(cin, patient.message);
+            cout << "Assign Doctor by Name: ";
+            getline(cin, patient.doctor.name);
 
-                cout << "Enter Patient Age: ";
-                cin.ignore();
-                cin >> patient.age;
-
-                cout << "Enter Patient Email: ";
-                cin.ignore();
-                getline(cin, patient.email);
-
-                cout << "Enter Patient Phone: ";
-                cin.ignore();
-                cin >> patient.phone;
-
-                cout << "Enter Description of illness: ";
-                cin.ignore();
-                getline(cin, patient.message);
-
-                cout << "Assign Doctor by Name: ";
-                getline(cin, patient.doctor.name);
-
-                bool found = false;
-
-                for (int i = 0; i < doctors.size(); i++)
-                {
-                    if (doctors[i].name == patient.doctor.name)
-                    {
-                        patient.doctor = doctors[i];
-                        patients.push_back(patient);
-                        cout << "\nDoctor assigned successfully\n";
-                        found = true;
-                        break;
-                    }
+            bool found = false;
+            for (int i = 0; i < doctors.size(); i++) {
+                if (doctors[i].name == patient.doctor.name) {
+                    patient.doctor = doctors[i];
+                    patients.push_back(patient);
+                    cout << "\nPatient registered successfully.";
+                    cout << "\nDoctor Assigned: " << doctors[i].name << " (Department: " << doctors[i].department << ")";
+                    found = true;
+                    break;
                 }
-                if (!found)
-                {
-                    cout << "\nDoctor not found\n";
-                }
-                break;
             }
-    case 2:
-            {
-                string name;
-                cout << "\nEnter Patient Name: ";
-                cin.ignore();
-                getline(cin, name);
-                for (int i = 0; i < patients.size(); i++)
-                {
-                    if (patients[i].name == name)
-                    {
-                        cout << "Patient Age: " << patients[i].age << "\nPatient Email: " << patients[i].email << "\nPatient Phone: " << patients[i].phone
-                        << "\nDescription: " << patients[i].message << endl;
-                        cout << "\nAssigned Doctor: " << patients[i].doctor.id << "\nName: " << patients[i].doctor.name << "\nDepartment: " << patients[i].doctor.department << endl;
-                        break;
-                    }
-                }
-                break;
+
+            if (!found) {
+                cout << "\nDoctor not found. Please assign later.";
             }
-    case 3:
-            {
-                string name;
-                cout << "\nEnter Patient Name: ";
-                cin.ignore();
-                getline(cin, name);
-
-                for (int i = 0; i < patients.size(); i++)
-                {
-                    if (patients[i].name == name)
-                    {
-                        cout << "\nUpdated Name: ";
-                        getline(cin, patients[i].name);
-
-                        cout << "Updated Age: ";
-                        cin >> patients[i].age;
-                        cin.ignore();
-
-                        cout << "Updated Email: ";
-                        getline(cin, patients[i].email);
-
-                        cout << "Updated Phone: ";
-                        cin >> patients[i].phone;
-                        cin.ignore();
-
-                        cout << "Updated Description: ";
-                        getline(cin, patients[i].message);
-
-                        cout << "Updated Doctor Name: ";
-                        string docName;
-                        getline(cin, docName);
-
-                        bool doctorFound = false;
-                        for (int j = 0; j < doctors.size(); j++)
-                        {
-                            if (doctors[j].name == docName)
-                            {
-                                patients[i].doctor = doctors[j];
-                                cout << "\nDoctor assigned successfully.\n";
-                                doctorFound = true;
-                                break;
-                            }
-                        }
-
-                        if (!doctorFound)
-                        {
-                            cout << "\nDoctor not found. Keeping the previous doctor assigned.\n";
-                        }
-
-                        break;
-                    }
-                }
-                break;
-            }
-    case 4:
-        cout << "\nEnter Patient Name: ";
-        string name;
-        cin >> name;
-        for (int i = 0; i < patients.size(); i++)
-        {
-            if (patients[i].name == name)
-            {
-                patients.erase(patients.begin() + i);
-                break;
-            }
+            break;
         }
-        break;
-    case 5:
-            {
-                Interface();
-                return 0;
+        case 2: {
+            cout << "\n[Patient Search]\n";
+            cout << "\nEnter Patient Name: ";
+            string name;
+            getline(cin, name);
+
+            bool found = false;
+            for (int i = 0; i < patients.size(); i++) {
+                if (patients[i].name == name) {
+                    found = true;
+                    cout << "Patient Name: " << patients[i].name << "\n";
+                    cout << "Age: " << patients[i].age << "\n";
+                    cout << "Email: " << patients[i].email << "\n";
+                    cout << "Phone: " << patients[i].phone << "\n";
+                    cout << "Description: " << patients[i].message << "\n";
+                    cout << "Assigned Doctor: " << patients[i].doctor.name << " (Department: " << patients[i].doctor.department << ")\n";
+                    break;
+                }
             }
-    default:
-        cout << "\nInvalid Key\n";
+
+            if (!found) {
+                cout << "\nPatient not found.\n";
+            }
+            break;
+        }
+        case 3: {
+            cout << "\n[Update Patient Record]\n";
+            cout << "\nEnter Patient Name: ";
+            string name;
+            getline(cin, name);
+
+            bool found = false;
+            for (int i = 0; i < patients.size(); i++) {
+                if (patients[i].name == name) {
+                    found = true;
+                    cout << "New Name: ";
+                    getline(cin, patients[i].name);
+                    cout << "New Age: ";
+                    cin >> patients[i].age;
+                    cin.ignore();
+                    cout << "New Email: ";
+                    getline(cin, patients[i].email);
+                    cout << "New Phone: ";
+                    cin >> patients[i].phone;
+                    cin.ignore();
+                    cout << "New Description: ";
+                    getline(cin, patients[i].message);
+                    cout << "New Doctor Name: ";
+                    getline(cin, patients[i].doctor.name);
+
+                    bool doctorFound = false;
+                    for (int j = 0; j < doctors.size(); j++) {
+                        if (doctors[j].name == patients[i].doctor.name) {
+                            patients[i].doctor = doctors[j];
+                            cout << "\nDoctor assigned successfully.";
+                            doctorFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!doctorFound) {
+                        cout << "\nDoctor not found. Keeping previous doctor.";
+                    }
+
+                    cout << "\nPatient record updated successfully.\n";
+                    break;
+                }
+            }
+
+            if (!found) {
+                cout << "\nPatient not found.\n";
+            }
+            break;
+        }
+        case 4: {
+            cout << "\n[Remove Patient]\n";
+            cout << "\nEnter Patient Name: ";
+            string name;
+            getline(cin, name);
+
+            for (int i = 0; i < patients.size(); i++) {
+                if (patients[i].name == name) {
+                    patients.erase(patients.begin() + i);
+                    cout << "\nPatient removed successfully.\n";
+                    break;
+                }
+            }
+            break;
+        }
+        case 5:
+            return Interface();
+        default:
+            cout << "\nInvalid choice. Please try again.\n";
     }
-    patientsInterface();
-    return 0;
+    return patientsInterface();
 }
 
-int doctorsInterface()
-{
+int doctorsInterface() {
     int choice;
+    cout << "\n[Doctor Management]\n";
     cout << "\n[1] Register Doctor\n[2] Search Doctor\n[3] Update Doctor Record\n[4] Remove Doctor\n[5] Exit\n";
-    cout << "\nEnter [Key]: ";
+    cout << "\nEnter [Key]\n";
     cin >> choice;
+    cin.ignore();
 
-    switch (choice)
-    {
-    case 1:
-        {
+    switch (choice) {
+        case 1: {
             Doctor doctor;
+            cout << "\n[Register Doctor]\n";
             cout << "\nEnter Doctor Name: ";
-            cin.ignore();
             getline(cin, doctor.name);
             cout << "Enter Department Name: ";
             getline(cin, doctor.department);
             cout << "Enter Doctor ID: ";
             cin >> doctor.id;
+            cin.ignore();
+
             doctors.push_back(doctor);
+            cout << "\nDoctor registered successfully.";
             break;
         }
-    case 2:
-        {
-            cout << "\nEnter Doctor ID: ";
+        case 2: {
+            cout << "\n[Search Doctor]\n";
+            cout << "Enter Doctor ID: ";
             int id;
             cin >> id;
-            for (int i = 0; i < doctors.size(); i++)
-            {
-                if (doctors[i].id == id)
-                {
-                    cout << "\nDoctor Name: " << doctors[i].name << "\nDoctor Department: " << doctors[i].department << "\n";
+            cin.ignore();
+
+            for (int i = 0; i < doctors.size(); i++) {
+                if (doctors[i].id == id) {
+                    cout << "Doctor Name: " << doctors[i].name << "\n";
+                    cout << "Department: " << doctors[i].department << "\n";
                     break;
                 }
             }
             break;
         }
-    case 3:
-        {
-            cout << "\nEnter Doctor ID: ";
+        case 3: {
+            cout << "\n[Update Doctor Record]\n";
+            cout << "Enter Doctor ID: ";
             int id;
             cin >> id;
-            for (int i = 0; i < doctors.size(); i++)
-            {
-                if (doctors[i].id == id)
-                {
-                    cout << "Enter new name: ";
-                    cin.ignore();
+            cin.ignore();
+
+            for (int i = 0; i < doctors.size(); i++) {
+                if (doctors[i].id == id) {
+                    cout << "New Name: ";
                     getline(cin, doctors[i].name);
-                    cout << "Enter new department: ";
+                    cout << "New Department: ";
                     getline(cin, doctors[i].department);
+                    cout << "\nDoctor record updated successfully.\n";
                     break;
                 }
             }
             break;
         }
-    case 4:
-        {
-            cout << "\nEnter Doctor ID: ";
+        case 4: {
+            cout << "\n[Remove Doctor]\n";
+            cout << "\n Enter Doctor ID: ";
             int id;
             cin >> id;
-            for (int i = 0; i < doctors.size(); i++)
-            {
-                if (doctors[i].id == id)
-                {
+            cin.ignore();
+
+            for (int i = 0; i < doctors.size(); i++) {
+                if (doctors[i].id == id) {
                     doctors.erase(doctors.begin() + i);
+                    cout << "\nDoctor removed successfully.\n";
                     break;
                 }
             }
             break;
         }
-    case 5:
-        Interface();
-        return 0;
-    default:
-        cout << "\nInvalid Key\n";
+        case 5:
+            return Interface();
+        default:
+            cout << "\nInvalid choice. Please try again.\n";
     }
-    doctorsInterface();
-    return 0;
+    return doctorsInterface();
 }
 
-int Interface()
-{
+int Interface() {
     cout << "\n[1] Doctor Management\n[2] Patient Management\n[-1] Exit\n";
     cout << "\nEnter [Key]\n";
-
     int choice;
     cin >> choice;
 
-    if (choice == 1)
-    {
-        cout << "\n[Doctors]\n";
-        doctorsInterface();
-    } else if (choice == 2)
-    {
-        cout << "\n[Patients]\n";
-        patientsInterface();
-    } else if (choice == -1) {
-        return 0;
-    } else
-    {
-        cout << "\nInvalid Choice\n";
-        Interface();
-    }
-    return 0;
+    if (choice == 1) return doctorsInterface();
+    if (choice == 2) return patientsInterface();
+    if (choice == -1) return 0;
+
+    cout << "\nInvalid choice. Please try again.\n";
+    return Interface();
 }
 
 int main() {
-
     cout << "\nWelcome to [Triad Health]\n";
-
-    Interface();
-
-    return 0;
+    return Interface();
 }
